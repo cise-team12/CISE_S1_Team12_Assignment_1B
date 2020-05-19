@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Database Search</title>
+</head>
+<body>
+<h2>Search Result</h2><br>
 <?php
 $username="root";
 $password="";
@@ -14,7 +21,7 @@ if(isset($_POST["enter"]))
 		{
 			$search=$_POST["search"];
 
-			$sqlString = "SELECT * FROM `article` WHERE title like '$search%'";
+			$sqlString = "SELECT * FROM `article` WHERE title like '$search%' OR author like '$search%' OR description like '$search%'";
 		
 			$sqlResult=mysqli_query($connection, $sqlString);
 		
@@ -46,9 +53,13 @@ if(isset($_POST["enter"]))
 		}
 	}
 
-
-
 }
 
 
 ?>
+
+<p><a href="index.html">Search an another Article</a></p>
+</body>
+
+</html>
+
