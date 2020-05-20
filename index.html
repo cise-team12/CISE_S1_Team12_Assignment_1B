@@ -7,7 +7,7 @@
 <h2>Search Articles</h2>
 <form action ="search.php" method="POST">
 	<label for="title">Title: </label><br>
-	<input type="text" id="search" name="search"><br>
+	<input type="text" id="search" name="search"><br> <br>
 
 	<label>Sort By: </label>
 	<input type="radio" id="public" name="sort" value="title">
@@ -18,6 +18,12 @@
 	<label for="decription">Description</label>
 	<input type="radio" id="private" name="sort" value="year">
 	<label for="year">Year</label>
+	<br/> <br/>
+	
+	<label>Start Date </label>
+	<input type= "date" name = "startDate">
+	<label>End Date</label>
+	<input type = "date" name= "endDate">
 
 
 	<p><input type="submit" name="enter" value="submit"></p>
