@@ -2,6 +2,12 @@
 <html>
 <head>
 	<title>Database Search</title>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<h2>Search Result</h2><br>
@@ -29,16 +35,16 @@
 				$endDate = $_POST["endDate"];
 
 				$sqlString = "SELECT * FROM `article` 
-								WHERE title like '%$search%' 
-								AND year BETWEEN $startDate and $endDate 
-								ORDER BY $sortSetting";
+							WHERE title like '$search%' OR author like '$search%' OR description like '$search%'
+							AND year BETWEEN $startDate and $endDate 
+							ORDER BY $sortSetting";
 
 				$sqlResult = mysqli_query($connection, $sqlString);
 
 				if(!$sqlResult){
 					echo "<p>Something is wrong with ",	$sqlString , "</p>";
 				}else{
-					echo "<table border=\"1\">";
+					echo "<table class='table table-dark'>";
 					echo "<tr>\n"
 					."<th scope=\"col\">Article ID</th>\n"
 					."<th scope=\"col\">Title</th>\n"
