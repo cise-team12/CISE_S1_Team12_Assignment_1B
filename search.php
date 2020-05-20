@@ -1,58 +1,57 @@
 <?php
+	$username="root";
+	$password="root";
+	$database="seer";
+	$host="localhost";
 
-$username="root";
-$password="root";
-$database="seer";
-$host="localhost";
+	$connection=mysqli_connect($host,$username,$password,$database);
 
-$connection=mysqli_connect($host,$username,$password,$database);
-
-if(!$connection){
-	echo "connection failure";
-}else{
-	if(isset($_POST["sort"])){
-  		$sortSetting = $_POST["sort"];
+	if(!$connection){
+		echo "connection failure";
 	}else{
-		//This is here incase it comes in useful later, radio buttons default to title anyway so this should never be reached
-  		$sortSetting = "Default";
-	}
-
-	if(isset($_POST["enter"])){
-		$search=$_POST["search"];
-		$startDate = $_POST["startDate"];
-		$endDate = $_POST["endDate"];
-
-		$sqlString = "SELECT * FROM `article` 
-						WHERE title like '%$search%' 
-						AND year BETWEEN $startDate and $endDate 
-						ORDER BY $sortSetting";
-
-		$sqlResult = mysqli_query($connection, $sqlString);
-
-		if(!$sqlResult){
-			echo "<p>Something is wrong with ",	$sqlString , "</p>";
+		if(isset($_POST["sort"])){
+			$sortSetting = $_POST["sort"];
 		}else{
-			echo "<table border=\"1\">";
-			echo "<tr>\n"
-			."<th scope=\"col\">Article ID</th>\n"
-			."<th scope=\"col\">Title</th>\n"
-			."<th scope=\"col\">Author</th>\n"
-			."<th scope=\"col\">Description</th>\n"
-			."<th scope=\"col\">Year</th>\n"
-			."</tr>\n";
+			//This is here incase it comes in useful later, radio buttons default to title anyway so this should never be reached
+			$sortSetting = "Default";
+		}
 
-			while ($row = mysqli_fetch_assoc($sqlResult)){
-				echo "<tr>";
-				echo "<td>",$row["article_id"],"</td>";
-				echo "<td>",$row["title"],"</td>";
-				echo "<td>",$row["author"],"</td>";
-				echo "<td>",$row["description"],"</td>";
-				echo "<td>",$row["year"],"</td>";
-				echo "</tr>";
+		if(isset($_POST["enter"])){
+			$search=$_POST["search"];
+			$startDate = $_POST["startDate"];
+			$endDate = $_POST["endDate"];
+
+			$sqlString = "SELECT * FROM `article` 
+							WHERE title like '%$search%' 
+							AND year BETWEEN $startDate and $endDate 
+							ORDER BY $sortSetting";
+
+			$sqlResult = mysqli_query($connection, $sqlString);
+
+			if(!$sqlResult){
+				echo "<p>Something is wrong with ",	$sqlString , "</p>";
+			}else{
+				echo "<table border=\"1\">";
+				echo "<tr>\n"
+				."<th scope=\"col\">Article ID</th>\n"
+				."<th scope=\"col\">Title</th>\n"
+				."<th scope=\"col\">Author</th>\n"
+				."<th scope=\"col\">Description</th>\n"
+				."<th scope=\"col\">Year</th>\n"
+				."</tr>\n";
+
+				while ($row = mysqli_fetch_assoc($sqlResult)){
+					echo "<tr>";
+					echo "<td>",$row["article_id"],"</td>";
+					echo "<td>",$row["title"],"</td>";
+					echo "<td>",$row["author"],"</td>";
+					echo "<td>",$row["description"],"</td>";
+					echo "<td>",$row["year"],"</td>";
+					echo "</tr>";
+				}
+				echo "</table>";
+				mysqli_free_result($sqlResult);
 			}
-			echo "</table>";
-			mysqli_free_result($sqlResult);
 		}
 	}
-}
 ?>
