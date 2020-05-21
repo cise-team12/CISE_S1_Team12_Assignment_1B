@@ -10,7 +10,7 @@
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<h2>Search Result</h2><br>
+	<h1 class="text-center">Search Result</h1><br>
 	<?php
 		$username="root";
 		$password="root";
@@ -68,6 +68,6 @@
 			}
 		}
 	?>
-<p><a href="index.html">Search an another Article</a></p>
+<p><a class="btn btn-primary btn-lg btn-block" href="index.html" role="button">Search an another Article</a></p>
 </body>
 </html>
