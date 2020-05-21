@@ -35,7 +35,7 @@
 				$endDate = $_POST["endDate"];
 
 				$sqlString = "SELECT * FROM `article` 
-							WHERE title like '$search%' OR author like '$search%' OR description like '$search%'
+							WHERE title like '%$search%' OR author like '%$search%' OR description like '%$search%'
 							AND year BETWEEN $startDate and $endDate 
 							ORDER BY $sortSetting";
 
