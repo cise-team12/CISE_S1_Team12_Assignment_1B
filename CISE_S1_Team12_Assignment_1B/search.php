@@ -32,7 +32,6 @@
 		
 			if(isset($_POST["enter"])){
 				$search=$_POST["search"];
-				//define("startYear" , 2020);
 				$startYear = 2020;
 				$yearRange = $_POST["year"];
 				//$yearResult = $startYear - 5;
@@ -56,7 +55,6 @@
 					}
 					
 				}
-
 
 				if(!$sqlResult){
 					echo "<p>Something is wrong with ",	$sqlString , "</p>";
