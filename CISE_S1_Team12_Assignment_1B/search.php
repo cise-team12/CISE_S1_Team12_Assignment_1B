@@ -29,18 +29,30 @@
 				$sortSetting = "Default";
 			}
 
+		
 			if(isset($_POST["enter"])){
 				$search=$_POST["search"];
-				$startDate = $_POST["startDate"];
-				$endDate = $_POST["endDate"];
+				define("startYear" , 2020);
+				$yearRange = $_POST["year"];
 
 				$sqlString = "SELECT * FROM `article`
 							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
-							AND year BETWEEN $startDate and $endDate
+							AND year BETWEEN startYear and $yearResult
 							ORDER BY $sortSetting";
 
 				$sqlResult = mysqli_query($connection, $sqlString);
-
+				
+				if(isset($_POST["year"])){
+					define("startYear" , 2020);
+					$yearRange = $_POST["year"];
+					if ($yearRange == "lastFive" ){
+						$yearResult = startYear - 5;
+					}else if ($yearRange == "lastTen" ){
+						$yearResult = startYear - 10;
+					}else if ($yearRange == "lastTwenty" ){
+						$yearResult = startYear - 20;
+					}
+				}
 				if(!$sqlResult){
 					echo "<p>Something is wrong with ",	$sqlString , "</p>";
 				}else{
