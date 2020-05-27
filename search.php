@@ -34,9 +34,9 @@
 				$startDate = $_POST["startDate"];
 				$endDate = $_POST["endDate"];
 
-				$sqlString = "SELECT * FROM `article` 
-							WHERE title like '%$search%' OR author like '%$search%' OR description like '%$search%'
-							AND year BETWEEN $startDate and $endDate 
+				$sqlString = "SELECT * FROM `article`
+							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
+							AND year BETWEEN $startDate and $endDate
 							ORDER BY $sortSetting";
 
 				$sqlResult = mysqli_query($connection, $sqlString);
@@ -49,7 +49,7 @@
 					."<th scope=\"col\">Article ID</th>\n"
 					."<th scope=\"col\">Title</th>\n"
 					."<th scope=\"col\">Author</th>\n"
-					."<th scope=\"col\">Description</th>\n"
+					."<th scope=\"col\">Method</th>\n"
 					."<th scope=\"col\">Year</th>\n"
 					."</tr>\n";
 
@@ -58,7 +58,7 @@
 						echo "<td>",$row["article_id"],"</td>";
 						echo "<td>",$row["title"],"</td>";
 						echo "<td>",$row["author"],"</td>";
-						echo "<td>",$row["description"],"</td>";
+						echo "<td>",$row["method"],"</td>";
 						echo "<td>",$row["year"],"</td>";
 						echo "</tr>";
 					}
