@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Index page</title>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+ 	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ 	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+	<h1 class="text-center">Search Articles</h1>
+	<form action ="search.php" method="POST">
+		<div class="form-group">
+			<label for="title">Please Enter Title, Author or Method: </label>
+			<input type="text" class="form-control" id="search" name="search" placeholder="Enter Here" required="required">
+		</div>
+
+		<div class="form-group">
+			<label>Start Date </label>
+			<input type= "number" name = "startDate" class="form-control" placeholder="Enter Start Year" required="required">
+			<label>End Date</label>
+			<input type = "number" name= "endDate" class="form-control" placeholder="Enter End Year" required="required">
+		</div><br/>
+
+		<label>Sort By: </label>
+		<label class="radio-inline" >
+			<input type="radio" id="public" name="sort" value="title" checked="checked"> Title
+		</label>
+		<label class="radio-inline" >
+			<input type="radio" id="friends" name="sort" value="author"> Author
+		</label>
+		<label class="radio-inline" >
+			<input type="radio" id="private" name="sort" value="description"> Description
+		</label>
+		<label class="radio-inline" >
+			<input type="radio" id="private" name="sort" value="year"> Year
+		</label>
+		<br/>
+
+		<p><input type="submit" class="btn btn-primary btn-lg btn-block" name="enter" value="Submit"></p>
+
+	</form>
+</div>
+</body>
+</html>
