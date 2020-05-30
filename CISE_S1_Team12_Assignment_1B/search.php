@@ -57,7 +57,7 @@ class InputValues
 				$this->yearResult = $this->startDate - 5;
 			}else if ($this->yearRange == "lastTen" ){
 				$this->yearResult =  $this->startDate - 10;
-			}else if ($this->yearRange == "lastFiften" ){
+			}else if ($this->yearRange == "lastFifteen" ){
 				$this->yearResult =  $this->startDate - 15;
 			}else if ($this->yearRange == "lastTwenty" ){
 				$this->yearResult =  $this->startDate - 20;
