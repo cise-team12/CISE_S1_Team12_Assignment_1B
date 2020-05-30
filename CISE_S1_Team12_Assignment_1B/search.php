@@ -147,7 +147,7 @@ class SQLSend
 
 				$sqlString = "SELECT * FROM `article`
 							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
-							AND year BETWEEN $startDate and $endDate
+							AND year BETWEEN $yearResult and $startDate
 							ORDER BY $sortSetting";
 
 				$sqlResult = mysqli_query($connection, $sqlString);
