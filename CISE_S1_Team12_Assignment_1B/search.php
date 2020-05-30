@@ -56,7 +56,7 @@ class InputValues
 			if ($this->yearRange == "lastFive" ){
 				$this->yearResult = $this->startDate - 5;
 			}else if ($this->yearRange == "lastTen" ){
-				$this->yearResultt =  $this->startDate - 10;
+				$this->yearResult =  $this->startDate - 10;
 			}else if ($this->yearRange == "lastFiften" ){
 				$this->yearResult =  $this->startDate - 15;
 			}else if ($this->yearRange == "lastTwenty" ){
@@ -86,12 +86,12 @@ class SQLSend
 {
 	private $connection;
 	private $search;
-	public $startDate="";
-	public $yearRange="";
-	public $yearResult="";
+	public $startDate;
+	public $yearRange;
+	public $yearResult;
 	private $sortSetting;
 	private $sqlString;
-	public function __construct($search, $startDate, $endDate, $sortSetting)
+	public function __construct($search, $startDate, $yearRange, $yearResult, $sortSetting)
   	{
 		$this->connection = new DatabaseConnection();
 		$this->$search = $search;
@@ -141,7 +141,7 @@ class SQLSend
 				$values-> setStartDate();
 				$startDate = $values ->getStartDate();
 				$values-> setEndDate();
-				$endDate = $values ->getEndDate();
+				$yearResult = $values ->getEndDate();
 				$values ->setSort();
 				$sortSetting = $values -> getSort();
 
@@ -151,13 +151,14 @@ class SQLSend
 							ORDER BY $sortSetting";
 
 				$sqlResult = mysqli_query($connection, $sqlString);
-
+				
 				/*$sqlSend = new SQLSend($search, $startDate, $endDate, $sortSetting);
 				$sqlStr =$sqlSend->QueryDB(); 
 				$sqlResult = mysqli_query($connection, $sqlStr);*/
 
 				if(!$sqlResult){
-					echo "<p>Something is wrong with ",	$sqlString , "</p>";
+					echo "<p>Something is wrong with ",	$sqlString , "</p> <br>";
+					echo "<p>Year Result ",	$yearResult, "</p> <br>";
 				}else{
 					echo "<table class='table table-dark'>";
 					echo "<tr>\n"
