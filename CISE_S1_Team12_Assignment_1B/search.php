@@ -29,21 +29,8 @@
 				$sortSetting = "Default";
 			}
 
-		
-			if(isset($_POST["enter"])){
-				$search=$_POST["search"];
-				$startYear = 2020;
+			if(isset($_POST["year"])){
 				$yearRange = $_POST["year"];
-				//$yearResult = $startYear - 5;
-
-				$sqlString = "SELECT * FROM `article`
-							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
-							AND year BETWEEN $yearResult and $startYear
-							ORDER BY $sortSetting";
-
-				$sqlResult = mysqli_query($connection, $sqlString);
-				
-				if(isset($_POST["year"])){
 					if ($yearRange == "lastFive" ){
 						$yearResult = $startYear - 5;
 					}else if ($yearRange == "lastTen" ){
@@ -53,8 +40,19 @@
 					}else if ($yearRange == "lastTwenty" ){
 						$yearResult = $startYear - 20;
 					}
-					
 				}
+
+			if(isset($_POST["enter"])){
+				$search=$_POST["search"];
+				$startYear = 2020;
+				$sqlString = "SELECT * FROM `article`
+							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
+							AND year BETWEEN $yearResult and $startYear
+							ORDER BY $sortSetting";
+
+				$sqlResult = mysqli_query($connection, $sqlString);
+				
+				
 
 				if(!$sqlResult){
 					echo "<p>Something is wrong with ",	$sqlString , "</p>";
