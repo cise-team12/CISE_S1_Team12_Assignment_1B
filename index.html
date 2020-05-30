@@ -16,28 +16,37 @@
 			<label for="title">Please Enter Title, Author or Method: </label>
 			<input type="text" class="form-control" id="search" name="search" placeholder="Enter Here" required="required">
 		</div>
+		<br>
 
-		<div class="form-group">
-			<label>Start Date </label>
-			<input type= "number" name = "startDate" class="form-control" placeholder="Enter Start Year" required="required">
-			<label>End Date</label>
-			<input type = "number" name= "endDate" class="form-control" placeholder="Enter End Year" required="required">
-		</div><br/>
+		<label>Year: </label>
+		<label class="radio-inline" >
+			<input type="radio" id="lastFive" name="year" value="lastFive"> Last 5 Years
+		</label>
+		<label class="radio-inline" >
+			<input type="radio" id="lastTen" name="year" value="lastTen"> Last 10 Years
+		</label>
+		<label class="radio-inline" >
+			<input type="radio" id="lastFifteen" name="year" value="lastFifteen"> Last 15 Years
+		</label>
+		<label class="radio-inline" >
+			<input type="radio" id="lastTwenty" name="year" value="lastTwenty"> Last 20 Years
+		</label>
+		<br> <br>
 
 		<label>Sort By: </label>
 		<label class="radio-inline" >
-			<input type="radio" id="public" name="sort" value="title" checked="checked"> Title
+			<input type="radio" id="title" name="sort" value="title" > Title
 		</label>
 		<label class="radio-inline" >
-			<input type="radio" id="friends" name="sort" value="author"> Author
+			<input type="radio" id="author" name="sort" value="author"> Author
 		</label>
 		<label class="radio-inline" >
-			<input type="radio" id="private" name="sort" value="description"> Description
+			<input type="radio" id="Method" name="sort" value="description"> Method
 		</label>
 		<label class="radio-inline" >
-			<input type="radio" id="private" name="sort" value="year"> Year
+			<input type="radio" id="year" name="sort" value="year"> Year
 		</label>
-		<br/>
+		<br><br>
 
 		<p><input type="submit" class="btn btn-primary btn-lg btn-block" name="enter" value="Submit"></p>
 
