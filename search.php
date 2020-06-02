@@ -20,7 +20,8 @@ class InputValues
 {
 	public $search="";
 	public $startDate="";
-	public $endDate="";
+	public $yearRange="";
+	public $yearResult="";
 	public $sortSetting="";
 
   /*public function __construct($i)
@@ -41,12 +42,7 @@ class InputValues
   }
 	public function setStartDate()
   {
-		if(isset($_POST["startDate"]))
-		{
-			$this->startDate = $_POST["startDate"];
-		}else{
-			$this->startDate = 2000;
-		}
+	$this->startDate = 2020;
   }
 	public function getStartDate()
   {
@@ -54,16 +50,26 @@ class InputValues
   }
 	public function setEndDate()
   {
-		if(isset($_POST["endDate"]))
-		{
-			$this->endDate = $_POST["endDate"];
-		}else{
-			$this->endDate = 2020;
+	if(isset($_POST["year"])){
+		$this->yearRange = $_POST["year"];
+		//echo $this->yearRange;
+		//echo "<br> Start Date" . $this->startDate; //gets the radio button value
+		$this->setStartDate();
+			if ($this->yearRange == "lastFive" ){
+				$this->yearResult = $this->startDate - 5;
+			}else if ($this->yearRange == "lastTen" ){
+				$this->yearResult =  $this->startDate - 10;
+			}else if ($this->yearRange == "lastFifteen" ){
+				$this->yearResult =  $this->startDate - 15;
+			}else if ($this->yearRange == "lastTwenty" ){
+				$this->yearResult =  $this->startDate - 20;
+			}
 		}
+		//echo $this->yearResult;
   }
 	public function getEndDate()
   {
-		return $this->endDate;
+		return $this->yearResult;
   }
 	public function setSort()
   {
@@ -83,25 +89,26 @@ class SQLSend
 {
 	private $connection;
 	private $search;
-	private $startDate;
-	private $endDate;
+	public $startDate;
+	public $yearRange;
+	public $yearResult;
 	private $sortSetting;
 	private $sqlString;
-	public function __construct($search, $startDate, $endDate, $sortSetting)
+	public function __construct($search, $startDate, $yearRange, $yearResult, $sortSetting)
   	{
 		$this->connection = new DatabaseConnection();
 		$this->$search = $search;
 		$this->$startDate = $startDate;
-		$this->endDate = $endDate;
+		$this->$yearRange = $yearRange;
+		$this->$yearResult = $yearResult;
 		$this->$sortSetting = $sortSetting;
 	}
 	public function QueryDB()
 	{
 		$this->sqlString = "SELECT * FROM `article`
-							WHERE title like '%$this->search%' OR author like '%$this->search%' OR method like '%$this->search%'
-							AND year BETWEEN $this->startDate and $this->endDate
-							ORDER BY $this->sortSetting";
-
+							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
+							AND year BETWEEN $yearResult and $startDate
+							ORDER BY $sortSetting";
 
 		//return mysqli_query($connection, $sqlString);
 		return $this->sqlString;
@@ -137,23 +144,24 @@ class SQLSend
 				$values-> setStartDate();
 				$startDate = $values ->getStartDate();
 				$values-> setEndDate();
-				$endDate = $values ->getEndDate();
+				$yearResult = $values ->getEndDate();
 				$values ->setSort();
 				$sortSetting = $values -> getSort();
 
 				$sqlString = "SELECT * FROM `article`
 							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
-							AND year BETWEEN $startDate and $endDate
+							AND year BETWEEN $yearResult and $startDate
 							ORDER BY $sortSetting";
 
 				$sqlResult = mysqli_query($connection, $sqlString);
-
+				
 				/*$sqlSend = new SQLSend($search, $startDate, $endDate, $sortSetting);
 				$sqlStr =$sqlSend->QueryDB(); 
 				$sqlResult = mysqli_query($connection, $sqlStr);*/
 
 				if(!$sqlResult){
-					echo "<p>Something is wrong with ",	$sqlString , "</p>";
+					echo "<p>Something is wrong with ",	$sqlString , "</p> <br>";
+					//echo "<p>Year Result ",	$yearResult, "</p> <br>";
 				}else{
 					echo "<table class='table table-dark'>";
 					echo "<tr>\n"
