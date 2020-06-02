@@ -1,56 +1,124 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Index page</title>
 	<meta charset="utf-8">
-  	<meta name="viewport" content="width=device-width, initial-scale=1">
- 	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- 	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
+
 <body>
-<div class="container">
-	<h1 class="text-center">Search Articles</h1>
-	<form action ="search.php" method="POST">
-		<div class="form-group">
-			<label for="title">Please Enter Title, Author or Method: </label>
-			<input type="text" class="form-control" id="search" name="search" placeholder="Enter Here" required="required">
-		</div>
-		<br>
+	<div class="container">
+		<h1 class="text-center">Search Articles</h1>
+		<form action="search.php" method="POST">
+			<div class="form-group">
 
-		<label>Year: </label>
-		<label class="radio-inline" >
-			<input type="radio" id="lastFive" name="year" value="lastFive"> Last 5 Years
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="lastTen" name="year" value="lastTen"> Last 10 Years
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="lastFifteen" name="year" value="lastFifteen"> Last 15 Years
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="lastTwenty" name="year" value="lastTwenty"> Last 20 Years
-		</label>
-		<br> <br>
+				<label for="title">Please Enter Title, Author or Method: </label>
+				<input type="text" class="form-control" id="search" name="search" placeholder="Enter Here"
+					required="required">
+			</div>
+			<br>
 
-		<label>Sort By: </label>
-		<label class="radio-inline" >
-			<input type="radio" id="title" name="sort" value="title" > Title
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="author" name="sort" value="author"> Author
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="Method" name="sort" value="description"> Method
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="year" name="sort" value="year"> Year
-		</label>
-		<br><br>
+			<label>Year: </label>
+			<label class="radio-inline">
+				<input type="radio" id="lastFive" name="year" value="lastFive"> Last 5 Years
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="lastTen" name="year" value="lastTen"> Last 10 Years
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="lastFifteen" name="year" value="lastFifteen"> Last 15 Years
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="lastTwenty" name="year" value="lastTwenty"> Last 20 Years
+			</label>
+			<br> <br>
 
-		<p><input type="submit" class="btn btn-primary btn-lg btn-block" name="enter" value="Submit"></p>
+			<label>Sort By: </label>
+			<label class="radio-inline">
+				<input type="radio" id="title" name="sort" value="title"> Title
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="author" name="sort" value="author"> Author
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="Method" name="sort" value="description"> Method
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="year" name="sort" value="year"> Year
+			</label>
+			<br><br>
 
-	</form>
-</div>
+			<table id="myTable" class=" table order-list col-sm-4">
+				<thead>
+					<tr>
+						<td>Method</td>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="col-sm-2">
+							<select class="form-control" name="search" id="search">
+								<option value="tdd">TDD</option>
+								<option value="devops">DevOps</option>
+							</select>
+						</td>
+						<td class="col-sm-2"><a class="deleteRow"></a>
+							<input type="button" class="btn btn-md btn-success " id="addrow" value="Add Row" />
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="5" style="text-align: left;">
+
+						</td>
+					</tr>
+					
+				</tfoot>
+			</table>
+			<script>
+				$(document).ready(function () {
+					var counter = 0;
+
+					$("#addrow").on("click", function () {
+						var newRow = $("<tr>");
+						var cols = "";
+
+						cols += '<td><lable>Benifit</lable><select class="form-control" name="name' + counter + '"><option value ="perf">Performance</option></select></td>';
+						cols += '<td><input type="button" class="btn btn-md btn-success " id="addrow" value="Add Row" /></td>';
+						if()
+						cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+						newRow.append(cols);
+						$("table.order-list").append(newRow);
+						counter++;
+					});
+
+
+
+					$("table.order-list").on("click", ".ibtnDel", function (event) {
+						$(this).closest("tr").remove();
+						counter -= 1
+					});
+
+
+				});
+			</script>
+
+			<p><input type="submit" class="btn btn-primary btn-lg btn-block" name="enter"
+					onClick="getData('search.php','targetDiv', search.value, year.value, sort.value) " value="Submit">
+			</p>
+
+
+		</form>
+	</div>
+	<div id="targetDiv">
+		<p>The fetched data will go here.</p>
+	</div>
 </body>
+
 </html>

@@ -105,10 +105,10 @@ class SQLSend
 	}
 	public function QueryDB()
 	{
-		$this->sqlString = "SELECT * FROM `article`
+		/*$this->sqlString = "SELECT * FROM `article`
 							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
 							AND year BETWEEN $yearResult and $startDate
-							ORDER BY $sortSetting";
+							ORDER BY $sortSetting";*/
 
 		//return mysqli_query($connection, $sqlString);
 		return $this->sqlString;
@@ -149,12 +149,12 @@ class SQLSend
 				$sortSetting = $values -> getSort();
 
 				$sqlString = "SELECT * FROM `article`
-							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
+							WHERE (title like '%$search%' OR author like '%$search%' OR method like '%$search%')
 							AND year BETWEEN $yearResult and $startDate
 							ORDER BY $sortSetting";
-
-				$sqlResult = mysqli_query($connection, $sqlString);
 				
+				$sqlResult = mysqli_query($connection, $sqlString);
+				echo ($sqlString);
 				/*$sqlSend = new SQLSend($search, $startDate, $endDate, $sortSetting);
 				$sqlStr =$sqlSend->QueryDB(); 
 				$sqlResult = mysqli_query($connection, $sqlStr);*/
@@ -169,6 +169,8 @@ class SQLSend
 					."<th scope=\"col\">Title</th>\n"
 					."<th scope=\"col\">Author</th>\n"
 					."<th scope=\"col\">Method</th>\n"
+					."<th scope=\"col\">Result</th>\n"
+					."<th scope=\"col\">DOI</th>\n"
 					."<th scope=\"col\">Year</th>\n"
 					."</tr>\n";
 
@@ -178,6 +180,8 @@ class SQLSend
 						echo "<td>",$row["title"],"</td>";
 						echo "<td>",$row["author"],"</td>";
 						echo "<td>",$row["method"],"</td>";
+						echo "<td>",$row["result"],"</td>";
+						echo "<td>",$row["doi"],"</td>";
 						echo "<td>",$row["year"],"</td>";
 						echo "</tr>";
 					}
