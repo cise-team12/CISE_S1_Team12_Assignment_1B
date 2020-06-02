@@ -13,7 +13,7 @@
 <body>
 	<div class="container">
 		<h1 class="text-center">Search Articles</h1>
-		<form action="search.php" method="POST">
+		<form name="myForm" action="search.php" method="POST">
 			<div class="form-group">
 
 				<label for="title">Please Enter Title, Author or Method: </label>
@@ -55,16 +55,22 @@
 			<table id="myTable" class=" table order-list col-sm-4">
 				<thead>
 					<tr>
-						<td>Method</td>
+						<td class= 'lead'>Select Method or Result</td>
 
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="col-sm-2">
-							<select class="form-control" name="search" id="search">
+							<select class="form-control" name="search4" id="search">
+								<option value="method2">Method</option>
+								<option value="result">Result</option>
+							</select>
+						</td>
+						<td class="col-sm-2">
+							<select class="form-control" name="search2" id="search2">
 								<option value="tdd">TDD</option>
-								<option value="devops">DevOps</option>
+								<option value="devOps">DevOps</option>
 							</select>
 						</td>
 						<td class="col-sm-2"><a class="deleteRow"></a>
@@ -89,9 +95,19 @@
 						var newRow = $("<tr>");
 						var cols = "";
 
-						cols += '<td><lable>Benifit</lable><select class="form-control" name="name' + counter + '"><option value ="perf">Performance</option></select></td>';
-						cols += '<td><input type="button" class="btn btn-md btn-success " id="addrow" value="Add Row" /></td>';
-						if()
+						cols += '<td><select class="form-control" name="name' + counter + '"><option value ="method2">Method</option><option value ="result">Result</option></select></td>';
+						if(document.myForm.search.value == "tdd")
+						{
+							cols += '<td><select class="form-control" name="name2' + counter + '"><option value ="tdd">TDD</option><option value ="devOps">DevOps</option></select></td>';
+							alert("enters if");
+						}
+						else // result
+						{
+							cols += '<td><select class="form-control" name="name2' + counter + '"><option value ="perf">Perfomance</option><option value ="devOps">DevOps</option></select></td>';
+						}
+						
+						//cols += '<td><input type="button" class="btn btn-md btn-success " id="addrow" value="Add Row" /></td>';
+						//if()
 						cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
 						newRow.append(cols);
 						$("table.order-list").append(newRow);
