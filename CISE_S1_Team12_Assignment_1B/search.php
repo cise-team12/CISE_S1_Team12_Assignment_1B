@@ -52,6 +52,8 @@ class InputValues
   {
 	if(isset($_POST["year"])){
 		$this->yearRange = $_POST["year"];
+		//echo $this->yearRange;
+		//echo "<br> Start Date" . $this->startDate; //gets the radio button value
 		$this->setStartDate();
 			if ($this->yearRange == "lastFive" ){
 				$this->yearResult = $this->startDate - 5;
@@ -63,10 +65,11 @@ class InputValues
 				$this->yearResult =  $this->startDate - 20;
 			}
 		}
+		//echo $this->yearResult;
   }
 	public function getEndDate()
   {
-		return $this->endDate;
+		return $this->yearResult;
   }
 	public function setSort()
   {
@@ -158,7 +161,7 @@ class SQLSend
 
 				if(!$sqlResult){
 					echo "<p>Something is wrong with ",	$sqlString , "</p> <br>";
-					echo "<p>Year Result ",	$yearResult, "</p> <br>";
+					//echo "<p>Year Result ",	$yearResult, "</p> <br>";
 				}else{
 					echo "<table class='table table-dark'>";
 					echo "<tr>\n"
