@@ -76,7 +76,13 @@ class InputValues
 		if(isset($_POST["sort"]))
 		{
 			$this->sortSetting = $_POST["sort"];
+
+      if($this->sortSetting = 'description')
+      {
+        $this->sortSetting = 'method';
+      }
       echo "<br>" . $this->sortSetting . "<br>";
+
 		}else{
 			$this->sortSetting = "title";
 		}
@@ -155,7 +161,7 @@ class SQLSend
 				$sqlString = "SELECT * FROM `article`
 							WHERE (title like '%$search%' OR author like '%$search%' OR method like '%$search%')
 							AND year BETWEEN $yearResult and $startDate
-							ORDER BY ''$sortSetting'";
+							ORDER BY $sortSetting";
 
 				$sqlResult = mysqli_query($connection, $sqlString);
 				echo ($sqlString);
