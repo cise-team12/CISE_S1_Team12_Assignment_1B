@@ -91,6 +91,10 @@ class InputValues
 			$this->search = "";
 		}
   }
+  public function setTestSearch($search)
+  {
+		$this->search = $search;
+  }
 	public function getSearch()
   {
 		return $this->search;
@@ -98,6 +102,10 @@ class InputValues
 	public function setStartDate()
   {
 	$this->startDate = 2020;
+  }
+  public function setTestStartDate($startDate)
+  {
+		$this->startDate = $startDate;
   }
 	public function getStartDate()
   {
@@ -120,6 +128,20 @@ class InputValues
 			}
 		}
   }
+  public function setTestEndDate($yearRange)
+  {
+    $this->yearRange = $yearRange;
+    $this->setTestStartDate(2020);
+			if ($this->yearRange == 5 ){
+				$this->yearResult = $this->startDate - 5;
+			}else if ($this->yearRange == 10 ){
+				$this->yearResult =  $this->startDate - 10;
+			}else if ($this->yearRange == 15 ){
+				$this->yearResult =  $this->startDate - 15;
+			}else if ($this->yearRange == 20 ){
+				$this->yearResult =  $this->startDate - 20;
+			}
+  }
 	public function getEndDate()
   {
 		return $this->yearResult;
@@ -130,14 +152,13 @@ class InputValues
 		{
 			$this->sortSetting = $_POST["sort"];
 
-      /*if($this->sortSetting = 'description')
-      {
-        $this->sortSetting = 'method';
-      }*/
-
 		}else{
 			$this->sortSetting = "title";
 		}
+  }
+  public function setTestSort($sort)
+  {
+    $this->sortSetting = $sort;
   }
 	public function getSort()
   {
