@@ -2,27 +2,105 @@
 <?php
 class DatabaseConnection
 {
-  	public $username="root";
-	public $password="root";
-	public $database="seer";
-	public $host="localhost";
+  public $link;
+  public $dataSet;
 
-  /*public function __construct($i)
+  private $sqlQuery;
+
+  protected $username;
+	protected $password;
+	protected $database;
+	protected $host;
+
+  public function __construct()
   {
-  }*/
+    $this->username="root";
+  	$this->password="root";
+  	$this->database="seer";
+  	$this->host="localhost";
+  }
   public function dbConnect()
   {
-    return mysqli_connect($this->host,$this->username,$this->password,$this->database);
+    $this->link = mysqli_connect($this->host,$this->username,$this->password,$this->database);
+    return $this->link;
+  }
+  public function selectData($link, $search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting)
+  {
+    if($methodSetting == "" && $resultSetting == "")
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+    else if ($methodSetting != "" && $resultSetting == "")
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+    else 
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+    
+
+    $this ->dataSet = mysqli_query($link, $this ->sqlQuery);
+    return $this ->dataSet;
+  }
+  public function outputData($sqlResult)
+  {
+    if(!$sqlResult)
+    {
+      echo "<p>Something is wrong with ",	$this->sqlQuery , "</p> <br>";
+      //echo "<p>Year Result ",	$yearResult, "</p> <br>";
+    }else
+    {
+      echo "<table class='table table-dark'>";
+      echo "<tr>\n"
+      ."<th scope=\"col\">Article ID</th>\n"
+      ."<th scope=\"col\">Title</th>\n"
+      ."<th scope=\"col\">Author</th>\n"
+      ."<th scope=\"col\">Method</th>\n"
+      ."<th scope=\"col\">Result</th>\n"
+      ."<th scope=\"col\">DOI</th>\n"
+      ."<th scope=\"col\">Year</th>\n"
+      ."</tr>\n";
+
+      while ($row = mysqli_fetch_assoc($sqlResult))
+      {
+        echo "<tr>";
+        echo "<td>",$row["article_id"],"</td>";
+        echo "<td>",$row["title"],"</td>";
+        echo "<td>",$row["author"],"</td>";
+        echo "<td>",$row["method"],"</td>";
+        echo "<td>",$row["result"],"</td>";
+        echo "<td>",$row["doi"],"</td>";
+        echo "<td>",$row["year"],"</td>";
+        echo "</tr>";
+      }
+      echo "</table>";
+      mysqli_free_result($sqlResult);
   }
 
 }
+}
 class InputValues
 {
-	public $search="";
-	public $startDate="";
-	public $yearRange="";
-	public $yearResult="";
-	public $sortSetting="";
+	private $search="";
+	private $startDate="";
+	private $yearRange="";
+	private $yearResult="";
+	private $sortSetting="";
+  private $methodSetting = "";
+  private $resultSetting = "";
 
   /*public function __construct($i)
   {
@@ -36,6 +114,10 @@ class InputValues
 			$this->search = "";
 		}
   }
+  public function setTestSearch($search)
+  {
+		$this->search = $search;
+  }
 	public function getSearch()
   {
 		return $this->search;
@@ -43,6 +125,10 @@ class InputValues
 	public function setStartDate()
   {
 	$this->startDate = 2020;
+  }
+  public function setTestStartDate($startDate)
+  {
+		$this->startDate = $startDate;
   }
 	public function getStartDate()
   {
@@ -52,8 +138,7 @@ class InputValues
   {
 	if(isset($_POST["year"])){
 		$this->yearRange = $_POST["year"];
-		//echo $this->yearRange;
-		//echo "<br> Start Date" . $this->startDate; //gets the radio button value
+
 		$this->setStartDate();
 			if ($this->yearRange == "lastFive" ){
 				$this->yearResult = $this->startDate - 5;
@@ -65,7 +150,20 @@ class InputValues
 				$this->yearResult =  $this->startDate - 20;
 			}
 		}
-		//echo $this->yearResult;
+  }
+  public function setTestEndDate($yearRange)
+  {
+    $this->yearRange = $yearRange;
+    $this->setTestStartDate(2020);
+			if ($this->yearRange == 5 ){
+				$this->yearResult = $this->startDate - 5;
+			}else if ($this->yearRange == 10 ){
+				$this->yearResult =  $this->startDate - 10;
+			}else if ($this->yearRange == 15 ){
+				$this->yearResult =  $this->startDate - 15;
+			}else if ($this->yearRange == 20 ){
+				$this->yearResult =  $this->startDate - 20;
+			}
   }
 	public function getEndDate()
   {
@@ -76,43 +174,63 @@ class InputValues
 		if(isset($_POST["sort"]))
 		{
 			$this->sortSetting = $_POST["sort"];
+
 		}else{
 			$this->sortSetting = "title";
 		}
+  }
+  public function setTestSort($sort)
+  {
+    $this->sortSetting = $sort;
   }
 	public function getSort()
   {
 		return $this->sortSetting;
   }
+  public function setMethod()
+  {
+		if(isset($_POST["dropDownSearch"]))
+		{
+      if($_POST["dropDownSearch"] == "method2")
+      {
+        if(isset($_POST["search2"]))
+        {
+          $this->methodSetting = $_POST["search2"];
+        }
+        else{
+          $this->methodSetting = "";
+        }
+      }
+  }
 }
-class SQLSend
-{
-	private $connection;
-	private $search;
-	public $startDate;
-	public $yearRange;
-	public $yearResult;
-	private $sortSetting;
-	private $sqlString;
-	public function __construct($search, $startDate, $yearRange, $yearResult, $sortSetting)
-  	{
-		$this->connection = new DatabaseConnection();
-		$this->$search = $search;
-		$this->$startDate = $startDate;
-		$this->$yearRange = $yearRange;
-		$this->$yearResult = $yearResult;
-		$this->$sortSetting = $sortSetting;
-	}
-	public function QueryDB()
-	{
-		$this->sqlString = "SELECT * FROM `article`
-							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
-							AND year BETWEEN $yearResult and $startDate
-							ORDER BY $sortSetting";
+  public function setTestMethod($sort)
+  {
+    $this->methodSetting = $sort;
+  }
+	public function getMethod()
+  {
+		return $this->methodSetting;
+  }
+  public function setResult()
+  {
+		if(isset($_POST["result"]))
+		{
+      $this->resultSetting = $_POST["result"];
 
-		//return mysqli_query($connection, $sqlString);
-		return $this->sqlString;
-	}
+    }else
+    {
+			$this->resultSetting = "";
+ 
+  }
+}
+  public function setTestResult($x)
+  {
+    $this->resultSetting = $x;
+  }
+	public function getResult()
+  {
+		return $this->resultSetting;
+  }
 }
 
 ?>
@@ -132,12 +250,20 @@ class SQLSend
 
 		$db = new DatabaseConnection();
 		$connection= $db->dbConnect();
-		
 
-		if(!$connection){
+		if(!$connection)
+    {
 			echo "connection failure";
-		}else{
-			if(isset($_POST["enter"])){
+		}
+    else
+    {
+			if(isset($_POST["enter"]))
+      {
+
+        
+
+  
+
 				$values = new InputValues();
 				$values->setSearch();
 				$search = $values->getSearch();
@@ -147,45 +273,17 @@ class SQLSend
 				$yearResult = $values ->getEndDate();
 				$values ->setSort();
 				$sortSetting = $values -> getSort();
+        $values ->setMethod();
+        $methodSetting = $values -> getMethod();
+        $values ->setResult();
+				$resultSetting = $values -> getResult();
 
-				$sqlString = "SELECT * FROM `article`
-							WHERE title like '%$search%' OR author like '%$search%' OR method like '%$search%'
-							AND year BETWEEN $yearResult and $startDate
-							ORDER BY $sortSetting";
+				$sqlResult = $db->selectData($connection, $search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting);
+        $db->outputData($sqlResult);
 
-				$sqlResult = mysqli_query($connection, $sqlString);
-				
-				/*$sqlSend = new SQLSend($search, $startDate, $endDate, $sortSetting);
-				$sqlStr =$sqlSend->QueryDB(); 
-				$sqlResult = mysqli_query($connection, $sqlStr);*/
-
-				if(!$sqlResult){
-					echo "<p>Something is wrong with ",	$sqlString , "</p> <br>";
-					//echo "<p>Year Result ",	$yearResult, "</p> <br>";
-				}else{
-					echo "<table class='table table-dark'>";
-					echo "<tr>\n"
-					."<th scope=\"col\">Article ID</th>\n"
-					."<th scope=\"col\">Title</th>\n"
-					."<th scope=\"col\">Author</th>\n"
-					."<th scope=\"col\">Method</th>\n"
-					."<th scope=\"col\">Year</th>\n"
-					."</tr>\n";
-
-					while ($row = mysqli_fetch_assoc($sqlResult)){
-						echo "<tr>";
-						echo "<td>",$row["article_id"],"</td>";
-						echo "<td>",$row["title"],"</td>";
-						echo "<td>",$row["author"],"</td>";
-						echo "<td>",$row["method"],"</td>";
-						echo "<td>",$row["year"],"</td>";
-						echo "</tr>";
-					}
-					echo "</table>";
-					mysqli_free_result($sqlResult);
 				}
 			}
-		}
+
 	?>
 <p><a class="btn btn-primary btn-lg btn-block" href="index.html" role="button">Search an another Article</a></p>
 </body>
