@@ -58,5 +58,27 @@ class tests extends TestCase
       $values->setTestSort('title');
       $this->assertEquals('title', $values->getSort());
   }
+  public function testMethodTDDValue()
+  {
+      $values = new InputValues();
+      $values->setTestMethod('Test Driven Development');
+      $this->assertEquals('Test Driven Development', $values->getMethod());
+  }
+  public function testMethodDevOpsValue()
+  {
+      $values = new InputValues();
+      $values->setTestMethod('DevOps');
+      $this->assertEquals('DevOps', $values->getMethod());
+  }
+  public function testResultValue()
+  {
+      $values = new InputValues();
+      $values->setTestResult('Improve');
+      $this->assertEquals('Improve', $values->getResult());
+  }
+}
+?>
+
+  }
 }
 ?>

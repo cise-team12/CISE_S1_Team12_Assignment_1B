@@ -24,9 +24,9 @@ class DatabaseConnection
     $this->link = mysqli_connect($this->host,$this->username,$this->password,$this->database);
     return $this->link;
   }
-  public function selectData($link, $search,$yearResult,$startDate,$sortSetting, $methodSetting)
+  public function selectData($link, $search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting)
   {
-    if($methodSetting == "")
+    if($methodSetting == "" && $resultSetting == "")
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%')
@@ -34,7 +34,7 @@ class DatabaseConnection
             ORDER BY $sortSetting";
             echo $this->sqlQuery;
     }
-    else
+    else if ($methodSetting != "" && $resultSetting == "")
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
@@ -42,6 +42,15 @@ class DatabaseConnection
             ORDER BY $sortSetting";
             echo $this->sqlQuery;
     }
+    else 
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+    
 
     $this ->dataSet = mysqli_query($link, $this ->sqlQuery);
     return $this ->dataSet;
@@ -85,13 +94,13 @@ class DatabaseConnection
 }
 class InputValues
 {
-	public $search="";
-	public $startDate="";
-	public $yearRange="";
-	public $yearResult="";
-	public $sortSetting="";
-  public $methodSetting = "";
-  public $resultSetting = "";
+	private $search="";
+	private $startDate="";
+	private $yearRange="";
+	private $yearResult="";
+	private $sortSetting="";
+  private $methodSetting = "";
+  private $resultSetting = "";
 
   /*public function __construct($i)
   {
@@ -180,21 +189,20 @@ class InputValues
   }
   public function setMethod()
   {
-		if(isset($_POST["search2"]))
+		if(isset($_POST["dropDownSearch"]))
 		{
-			$this->methodSetting = $_POST["search2"];
-
-      if($this->methodSetting == "Test Driven Development")
+      if($_POST["dropDownSearch"] == "method2")
       {
-        echo"the fuck?";
-
+        if(isset($_POST["search2"]))
+        {
+          $this->methodSetting = $_POST["search2"];
+        }
+        else{
+          $this->methodSetting = "";
+        }
       }
-
-		}else{
-			$this->methodSetting = "";
-      echo"Success";
-		}
   }
+}
   public function setTestMethod($sort)
   {
     $this->methodSetting = $sort;
@@ -202,6 +210,26 @@ class InputValues
 	public function getMethod()
   {
 		return $this->methodSetting;
+  }
+  public function setResult()
+  {
+		if(isset($_POST["result"]))
+		{
+      $this->resultSetting = $_POST["result"];
+
+    }else
+    {
+			$this->resultSetting = "";
+ 
+  }
+}
+  public function setTestResult($x)
+  {
+    $this->resultSetting = $x;
+  }
+	public function getResult()
+  {
+		return $this->resultSetting;
   }
 }
 
@@ -231,6 +259,11 @@ class InputValues
     {
 			if(isset($_POST["enter"]))
       {
+
+        
+
+  
+
 				$values = new InputValues();
 				$values->setSearch();
 				$search = $values->getSearch();
@@ -241,9 +274,11 @@ class InputValues
 				$values ->setSort();
 				$sortSetting = $values -> getSort();
         $values ->setMethod();
-				$methodSetting = $values -> getMethod();
+        $methodSetting = $values -> getMethod();
+        $values ->setResult();
+				$resultSetting = $values -> getResult();
 
-				$sqlResult = $db->selectData($connection, $search,$yearResult,$startDate,$sortSetting, $methodSetting);
+				$sqlResult = $db->selectData($connection, $search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting);
         $db->outputData($sqlResult);
 
 				}
