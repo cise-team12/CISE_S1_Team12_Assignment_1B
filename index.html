@@ -1,56 +1,103 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Index page</title>
 	<meta charset="utf-8">
-  	<meta name="viewport" content="width=device-width, initial-scale=1">
- 	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- 	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </head>
+
 <body>
-<div class="container">
-	<h1 class="text-center">Search Articles</h1>
-	<form action ="search.php" method="POST">
-		<div class="form-group">
-			<label for="title">Please Enter Title, Author or Method: </label>
-			<input type="text" class="form-control" id="search" name="search" placeholder="Enter Here" required="required">
-		</div>
-		<br>
+	<div class="container">
+		<h1 class="text-center">Search Articles</h1>
+		<form name="myForm" action="search.php" method="POST">
+			<div class="form-group">
 
-		<label>Year: </label>
-		<label class="radio-inline" >
-			<input type="radio" id="lastFive" name="year" value="lastFive"> Last 5 Years
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="lastTen" name="year" value="lastTen"> Last 10 Years
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="lastFifteen" name="year" value="lastFifteen"> Last 15 Years
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="lastTwenty" name="year" value="lastTwenty"> Last 20 Years
-		</label>
-		<br> <br>
+				<label for="title">Please Enter Title, Author or Method: </label>
+				<input type="text" class="form-control" id="search" name="search" placeholder="Enter Here">
+			</div>
+			<div class="form-row align-items-center">
+			<div class="form-group">
+				<div class="col">
+				<select id="selectMe" class="form-control">
+				<option>Select Value</option>
+				<option value="method2">Method</option>
+				<option value="result">Result</option>
+			</select>
+			</div>
+			</div>
+			<div id="method2" class="group form-group" >
+				<div class="col">
+				<select class="form-control" name="search2" id="search2">
+				<option value="Test Driven Development">TDD</option>
+				<option value="DevOps">DevOps</option>
+			</select>
+			</div>
+			</div>
+			<div id="result" class="group form-group">
+				<div class="col">
+				<input type="text" name="result" class="form-control" >
+			</div>
+			</div>
+			</div>
+			<br>
 
-		<label>Sort By: </label>
-		<label class="radio-inline" >
-			<input type="radio" id="title" name="sort" value="title" > Title
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="author" name="sort" value="author"> Author
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="method" name="sort" value="method"> Method
-		</label>
-		<label class="radio-inline" >
-			<input type="radio" id="year" name="sort" value="year"> Year
-		</label>
-		<br><br>
+			<div class ="form-group">
+			<label>Year: </label>
+			<label class="radio-inline">
+				<input type="radio" id="lastFive" name="year" value="lastFive"> Last 5 Years
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="lastTen" name="year" value="lastTen"> Last 10 Years
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="lastFifteen" name="year" value="lastFifteen"> Last 15 Years
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="lastTwenty" name="year" value="lastTwenty" checked="checked"> Last 20 Years
+			</label>
+			</div>
+			<br>
 
-		<p><input type="submit" class="btn btn-primary btn-lg btn-block" name="enter" value="Submit"></p>
+			<label>Sort By: </label>
+			<label class="radio-inline">
+				<input type="radio" id="title" name="sort" value="title" checked="checked"> Title
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="author" name="sort" value="author"> Author
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="Method" name="sort" value="description"> Method
+			</label>
+			<label class="radio-inline">
+				<input type="radio" id="year" name="sort" value="year"> Year
+			</label>
+			<br><br>
 
-	</form>
-</div>
+			<div>
+				<input type="submit" class="btn btn-primary btn-lg btn-block" name="enter"
+				onClick="getData('search.php','targetDiv', search.value, year.value, sort.value) " value="Submit">
+			</div>
+
+			<script>
+				$(document).ready(function () {
+				$('.group').hide();
+				$('#selectMe').change(function () {
+					$('.group').hide();
+					$('#'+$(this).val()).show();
+				})
+				});
+			</script>
+
+		</form>
+
 </body>
+
 </html>

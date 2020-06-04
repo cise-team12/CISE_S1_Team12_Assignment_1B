@@ -24,13 +24,25 @@ class DatabaseConnection
     $this->link = mysqli_connect($this->host,$this->username,$this->password,$this->database);
     return $this->link;
   }
-  public function selectData($link, $search,$yearResult,$startDate,$sortSetting)
+  public function selectData($link, $search,$yearResult,$startDate,$sortSetting, $methodSetting)
   {
-    $this ->sqlQuery = "SELECT * FROM `article`
-          WHERE (title like '%$search%' OR author like '%$search%' OR method like '%$search%')
-          AND year BETWEEN $yearResult and $startDate
-          ORDER BY $sortSetting";
-          echo $this->sqlQuery;
+    if($methodSetting == "")
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+    else
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+
     $this ->dataSet = mysqli_query($link, $this ->sqlQuery);
     return $this ->dataSet;
   }
@@ -78,6 +90,8 @@ class InputValues
 	public $yearRange="";
 	public $yearResult="";
 	public $sortSetting="";
+  public $methodSetting = "";
+  public $resultSetting = "";
 
   /*public function __construct($i)
   {
@@ -164,6 +178,31 @@ class InputValues
   {
 		return $this->sortSetting;
   }
+  public function setMethod()
+  {
+		if(isset($_POST["search2"]))
+		{
+			$this->methodSetting = $_POST["search2"];
+
+      if($this->methodSetting == "Test Driven Development")
+      {
+        echo"the fuck?";
+
+      }
+
+		}else{
+			$this->methodSetting = "";
+      echo"Success";
+		}
+  }
+  public function setTestMethod($sort)
+  {
+    $this->methodSetting = $sort;
+  }
+	public function getMethod()
+  {
+		return $this->methodSetting;
+  }
 }
 
 ?>
@@ -201,8 +240,10 @@ class InputValues
 				$yearResult = $values ->getEndDate();
 				$values ->setSort();
 				$sortSetting = $values -> getSort();
+        $values ->setMethod();
+				$methodSetting = $values -> getMethod();
 
-				$sqlResult = $db->selectData($connection, $search,$yearResult,$startDate,$sortSetting);
+				$sqlResult = $db->selectData($connection, $search,$yearResult,$startDate,$sortSetting, $methodSetting);
         $db->outputData($sqlResult);
 
 				}
