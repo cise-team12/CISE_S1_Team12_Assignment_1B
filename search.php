@@ -32,7 +32,7 @@ class DatabaseConnection
             WHERE (title like '%$search%' OR author like '%$search%')
             AND year BETWEEN $yearResult and $startDate
             ORDER BY $sortSetting";
-            echo $this->sqlQuery;
+            //echo $this->sqlQuery;
     }
     else if ($methodSetting != "" && $resultSetting == "")
     {
@@ -40,17 +40,16 @@ class DatabaseConnection
             WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
             AND year BETWEEN $yearResult and $startDate
             ORDER BY $sortSetting";
-            echo $this->sqlQuery;
+            //echo $this->sqlQuery;
     }
-    else 
+    else
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%')
             AND year BETWEEN $yearResult and $startDate
             ORDER BY $sortSetting";
-            echo $this->sqlQuery;
+            //echo $this->sqlQuery;
     }
-    
 
     $this ->dataSet = mysqli_query($link, $this ->sqlQuery);
     return $this ->dataSet;
@@ -60,7 +59,6 @@ class DatabaseConnection
     if(!$sqlResult)
     {
       echo "<p>Something is wrong with ",	$this->sqlQuery , "</p> <br>";
-      //echo "<p>Year Result ",	$yearResult, "</p> <br>";
     }else
     {
       echo "<table class='table table-dark'>";
@@ -92,6 +90,40 @@ class DatabaseConnection
 
 }
 }
+class DatabaseConnectionTest
+{
+  private $sqlQuery;
+
+  public function selectData($search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting)
+  {
+    if($methodSetting == "" && $resultSetting == "")
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            //echo $this->sqlQuery;
+    }
+    else if ($methodSetting != "" && $resultSetting == "")
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            //echo $this->sqlQuery;
+    }
+    else
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            //echo $this->sqlQuery;
+    }
+    return $this->sqlQuery;
+  }
+
+}
 class InputValues
 {
 	private $search="";
@@ -102,9 +134,6 @@ class InputValues
   private $methodSetting = "";
   private $resultSetting = "";
 
-  /*public function __construct($i)
-  {
-  }*/
   public function setSearch()
   {
 		if(isset($_POST["search"]))
@@ -201,11 +230,24 @@ class InputValues
           $this->methodSetting = "";
         }
       }
+    }
   }
-}
-  public function setTestMethod($sort)
+  public function setTestMethod($dropDownActive, $dropDownSearch, $search2Active, $search2)
   {
-    $this->methodSetting = $sort;
+    if($dropDownActive == TRUE)
+    {
+      if($dropDownSearch == "method2")
+      {
+        if($search2Active == TRUE)
+        {
+          $this->methodSetting = $search2;
+        }
+        else
+        {
+          $this->methodSetting = "";
+        }
+      }
+    }
   }
 	public function getMethod()
   {
@@ -220,9 +262,9 @@ class InputValues
     }else
     {
 			$this->resultSetting = "";
- 
+
+    }
   }
-}
   public function setTestResult($x)
   {
     $this->resultSetting = $x;
@@ -259,11 +301,6 @@ class InputValues
     {
 			if(isset($_POST["enter"]))
       {
-
-        
-
-  
-
 				$values = new InputValues();
 				$values->setSearch();
 				$search = $values->getSearch();
