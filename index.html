@@ -22,32 +22,68 @@
 
 				<label for="title">Enter Title or Author: </label>
 				<input type="text" class="form-control" id="search" name="search" placeholder="Enter Here">
-			</div>
-			<div class="form-row align-items-center">
-			<div class="form-group">
-				<div class="col">
-				<select name = "dropDownSearch" id="selectMe" class="form-control">
-				<option>Select Custom Filter</option>
-				<option value="method2">Method</option>
-				<option value="result">Result</option>
-			</select>
-			</div>
-			</div>
-			<div id="method2" class="group form-group" >
-				<div class="col">
-				<select class="form-control" name="search2" id="search2">
-				<option value="DevOps">DevOps</option>
-				<option value="Test Driven Development">TDD</option>
-			</select>
-			</div>
-			</div>
-			<div id="result" class="group form-group">
-				<div class="col">
-				<input type="text" name="result" class="form-control" >
-			</div>
-			</div>
-			</div>
-			<br>
+                </div>
+                <div class="form-row align-items-center">
+                <div class="form-group">
+                    <div class="col">
+                    <select name = "dropDownSearchA" id="selectA" class="form-control">
+                    <option>Select Custom Filter</option>
+                    <option value="methodA">Method</option>
+                </select>
+                </div>
+                </div>
+                <div id="methodA" class="groupA form-group" >
+                    <div class="col">
+                    <select class="form-control" name="searchA" id="searchA">
+                    <option value="DevOps">DevOps</option>
+                    <option value="Agile">Agile</option>
+                </select>
+                </div>
+                </div>
+            </div>
+
+            <div class="form-row align-items-center">
+                <div class="form-group">
+                    <div class="col">
+                    <select name = "dropDownSearchB" id="selectB" class="form-control">
+                    <option>Select Custom Filter</option>
+                    <option value="resultB">Result</option>
+                </select>
+                </div>
+                </div>
+                <div id="methodB" class="groupB form-group" >
+                    <div class="col">
+                    </div>
+                </div>
+                <div id="resultB" class="groupB form-group">
+                    <div class="col">
+                    <input type="text" name="result" class="form-control" >
+                </div>
+                </div>
+            </div>
+
+                <div class="form-row align-items-center">
+                    <div class="form-group">
+                        <div class="col">
+                        <select name = "dropDownSearchC" id="selectC" class="form-control">
+                        <option>Select Custom Filter</option>
+                        <option value="techniqueC">Technique</option>
+                    </select>
+                    </div>
+                    </div>
+                    <div id="methodC" class="groupC form-group" >
+                        <div class="col">
+                    </div>
+                    </div>
+                    <div id="techniqueC" class="groupC form-group" >
+                        <div class="col">
+                        <select class="form-control" name="technique" id="technique">
+                        <option value="DevOps">DevOps</option>
+                        <option value="Test Driven Development">TDD</option>
+                    </select>
+                    </div>
+                    </div>
+                </div>
 
 			<div class ="form-group">
 				<label>Year: </label>
@@ -68,7 +104,7 @@
 				<input type="radio" id="lastTen" name="year" value="lastTen"> Last 10 Years
 			</label>
 			<label class="radio-inline">
-				<input type="radio" id="all" name="year" value="All"> All
+				<input type="radio" id="all" name="year" value="All" checked="checked"> All
 			</label>
 			</div>
 			<br>
@@ -89,15 +125,33 @@
 			<br><br>
 
 			<div>
-				<input type="submit" class="btn btn-primary btn-lg btn-block" name="enter"
+				<input type="submit" class="btn btn-success btn-sm btn-sm" name="enter"
 				onClick="getData('search.php','targetDiv', search.value, year.value, sort.value) " value="Submit">
 			</div>
 
 			<script>
 				$(document).ready(function () {
-				$('.group').hide();
-				$('#selectMe').change(function () {
-					$('.group').hide();
+				$('.groupA').hide();
+				$('#selectA').change(function () {
+					$('.groupA').hide();
+					$('#'+$(this).val()).show();
+				})
+				});
+            </script>
+            <script>
+				$(document).ready(function () {
+				$('.groupB').hide();
+				$('#selectB').change(function () {
+					$('.groupB').hide();
+					$('#'+$(this).val()).show();
+				})
+				});
+            </script>
+            <script>
+				$(document).ready(function () {
+				$('.groupC').hide();
+				$('#selectC').change(function () {
+					$('.groupC').hide();
 					$('#'+$(this).val()).show();
 				})
 				});

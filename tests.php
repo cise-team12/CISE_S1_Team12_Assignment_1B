@@ -61,18 +61,19 @@ class tests extends TestCase
       $values->setTestSort('title');
       $this->assertEquals('title', $values->getSort());
   }
-  public function testMethodTDDValue()
+  public function testMethodAgileValue()
   {
       $values = new InputValues();
-      $values->setTestMethod(TRUE, 'method2', TRUE, 'Test Driven Development');
-      $this->assertEquals('Test Driven Development', $values->getMethod());
+      $values->setTestMethod(TRUE, 'method2', TRUE, 'Agile');
+      $this->assertEquals('Agile', $values->getMethod());
   }
+ 
   public function testMethodDevOpsValue()
   {
       $values = new InputValues();
       $values->setTestMethod(TRUE, 'method2', TRUE,'DevOps');
       $this->assertEquals('DevOps', $values->getMethod());
-  }
+  } 
   public function testMethodNoDropDown()
   {
       $values = new InputValues();
@@ -91,6 +92,14 @@ class tests extends TestCase
       $values->setTestResult('Improve');
       $this->assertEquals('Improve', $values->getResult());
   }
+
+  public function testTechniqueDevOpsValue()
+  {
+      $values = new InputValues();
+      $values->setTestTechnique(TRUE, 'technique', TRUE, 'DevOps');
+      $this->assertEquals('DevOps', $values->getTechnique());
+  }
+
   public function testSQLNoDropDown()
   {
       $db = new DatabaseConnectionTest();
@@ -98,7 +107,8 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%')
             AND year BETWEEN 2015 and 2020
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "", "", "", ""));
+      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "", "", "", "", ""));
+      // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
   }
   public function testSQLWithMethod()
   {
@@ -107,7 +117,8 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%') AND (method like '%DevOps%')
             AND year BETWEEN 2015 and 2020
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "DevOps", "" , "", ""));
+      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "DevOps", "", "" , "", ""));
+      // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
   }
   public function testSQLWithResult()
   {
@@ -116,7 +127,8 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%') AND (result like '%Improve%')
             AND year BETWEEN 2015 and 2020
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "", "Improve", "", ""));
+      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "", "", "Improve", "", ""));
+      // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
   }
   public function testSQLWithResultCustomRange()
   {
@@ -125,27 +137,38 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%') AND (result like '%Improve%')
             AND year BETWEEN 2012 and 2018
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "", "Improve", 2012, 2018));
+      $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "", "" , "Improve", 2012, 2018));
+      // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
   }
    public function testSQLWithMethodCustomRange()
   {
     $db = new DatabaseConnectionTest();
     $expectedString = "SELECT * FROM `article`
-            WHERE (title like '%a%' OR author like '%a%') AND (method like '%TDD%')
+            WHERE (title like '%a%' OR author like '%a%') AND (method like '%Agile%')
             AND year BETWEEN 2012 and 2018
             ORDER BY title";
-    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "TDD", "", 2012, 2018));
-    // search, yearResult, startDate, sortSetting, methodSetting, resultSetting, minDate, maxDate
+    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "Agile", "", "", 2012, 2018));
+    // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
   }
+  /*public function testSQLWithTechniqueCustomRange()
+  {
+    $db = new DatabaseConnectionTest();
+    $expectedString = "SELECT * FROM `article`
+            WHERE (title like '%a%' OR author like '%a%') AND (method like '%Agile%')
+            AND year BETWEEN 2012 and 2018
+            ORDER BY title";
+    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "Agile", "", "", 2012, 2018));
+    // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
+  }*/
   public function testSQLWithMethodResultCustomRange()
   {
     $db = new DatabaseConnectionTest();
     $expectedString = "SELECT * FROM `article`
-            WHERE (title like '%a%' OR author like '%a%') AND (method like '%TDD%') AND (result like '%Improve%')
+            WHERE (title like '%a%' OR author like '%a%') AND (result like '%Improve%') AND (method like '%Agile%')
             AND year BETWEEN 2012 and 2018
             ORDER BY title";
-    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "TDD", "Improve", 2012, 2018));
-    // search, yearResult, startDate, sortSetting, methodSetting, resultSetting, minDate, maxDate
+    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "Agile", "", "Improve", 2012, 2018));
+    // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
   }
   public function testSQLWithCustomRange()
   {
@@ -154,10 +177,21 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%')
             AND year BETWEEN 2012 and 2018
             ORDER BY title";
-    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "", "", 2012, 2018));
-    // search, yearResult, startDate, sortSetting, methodSetting, resultSetting, minDate, maxDate
+    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "", "", "", 2012, 2018));
+   // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
   }
-  
+
+  public function testSQLWithTechniqueMethodResultCustomRange()
+  {
+    $db = new DatabaseConnectionTest();
+    $expectedString = "SELECT * FROM `article`
+            WHERE (title like '%a%' OR author like '%a%') AND (method like '%Agile%') AND (result like '%Improve%') AND (technique like '%DevOps%')
+            AND year BETWEEN 2012 and 2018
+            ORDER BY title";
+    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "Agile", "DevOps", "Improve", 2012, 2018));
+    // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
+  }
+
   public function testFullFunctionality()
   {
       $db = new DatabaseConnectionTest();
@@ -166,13 +200,13 @@ class tests extends TestCase
       $values->setTestStartDate(2020);
       $values->setTestEndDate(5);
       $values->setTestSort('title');
-      $values->setTestMethod(TRUE, 'method2', TRUE, 'Test Driven Development');
+      $values->setTestMethod(TRUE, 'method2', TRUE, 'Agile');
 
       $expectedString = "SELECT * FROM `article`
-            WHERE (title like '%a%' OR author like '%a%') AND (method like '%Test Driven Development%')
+            WHERE (title like '%a%' OR author like '%a%') AND (method like '%Agile%')
             AND year BETWEEN 2015 and 2020
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData($values->getSearch(), $values->getEndDate(), $values->getStartDate(), $values->getSort(), $values->getMethod(), "", "", ""));
+      $this->assertEquals($expectedString, $db->selectData($values->getSearch(), $values->getEndDate(), $values->getStartDate(), $values->getSort(), $values->getMethod(), "", "", "", ""));
   }
 
  
