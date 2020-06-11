@@ -33,18 +33,28 @@ class tests extends TestCase
       $values->setTestEndDate(10);
       $this->assertEquals(2010, $values->getEndDate());
   }
-  public function testYearResultValue15()
-  {
-      $values = new InputValues();
-      $values->setTestEndDate(15);
-      $this->assertEquals(2005, $values->getEndDate());
-  }
-  public function testYearResultValue20()
+
+  public function testYearResultValueAll()
   {
       $values = new InputValues();
       $values->setTestEndDate(20);
       $this->assertEquals(2000, $values->getEndDate());
   }
+
+  public function testMinDateValue()
+  {
+    $values = new InputValues();
+    $values -> setTestMinDate (2000);
+    $this->assertEquals(2000,$values->getMinDate());
+  }
+
+  public function testMaxDateValue()
+  {
+    $values = new InputValues();
+    $values -> setTestMaxDate (2020);
+    $this->assertEquals(2020,$values->getMaxDate());
+  }
+
   public function testSortValue()
   {
       $values = new InputValues();
@@ -88,7 +98,7 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%')
             AND year BETWEEN 2015 and 2020
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "", ""));
+      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "", "", "", ""));
   }
   public function testSQLWithMethod()
   {
@@ -97,7 +107,7 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%') AND (method like '%DevOps%')
             AND year BETWEEN 2015 and 2020
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "DevOps", ""));
+      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "DevOps", "" , "", ""));
   }
   public function testSQLWithResult()
   {
@@ -106,8 +116,48 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%') AND (result like '%Improve%')
             AND year BETWEEN 2015 and 2020
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "", "Improve"));
+      $this->assertEquals($expectedString, $db->selectData("a", 2015, 2020, "title", "", "Improve", "", ""));
   }
+  public function testSQLWithResultCustomRange()
+  {
+      $db = new DatabaseConnectionTest();
+      $expectedString = "SELECT * FROM `article`
+            WHERE (title like '%a%' OR author like '%a%') AND (result like '%Improve%')
+            AND year BETWEEN 2012 and 2018
+            ORDER BY title";
+      $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "", "Improve", 2012, 2018));
+  }
+   public function testSQLWithMethodCustomRange()
+  {
+    $db = new DatabaseConnectionTest();
+    $expectedString = "SELECT * FROM `article`
+            WHERE (title like '%a%' OR author like '%a%') AND (method like '%TDD%')
+            AND year BETWEEN 2012 and 2018
+            ORDER BY title";
+    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "TDD", "", 2012, 2018));
+    // search, yearResult, startDate, sortSetting, methodSetting, resultSetting, minDate, maxDate
+  }
+  public function testSQLWithMethodResultCustomRange()
+  {
+    $db = new DatabaseConnectionTest();
+    $expectedString = "SELECT * FROM `article`
+            WHERE (title like '%a%' OR author like '%a%') AND (method like '%TDD%') AND (result like '%Improve%')
+            AND year BETWEEN 2012 and 2018
+            ORDER BY title";
+    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "TDD", "Improve", 2012, 2018));
+    // search, yearResult, startDate, sortSetting, methodSetting, resultSetting, minDate, maxDate
+  }
+  public function testSQLWithCustomRange()
+  {
+    $db = new DatabaseConnectionTest();
+    $expectedString = "SELECT * FROM `article`
+            WHERE (title like '%a%' OR author like '%a%')
+            AND year BETWEEN 2012 and 2018
+            ORDER BY title";
+    $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "", "", 2012, 2018));
+    // search, yearResult, startDate, sortSetting, methodSetting, resultSetting, minDate, maxDate
+  }
+  
   public function testFullFunctionality()
   {
       $db = new DatabaseConnectionTest();
@@ -122,8 +172,10 @@ class tests extends TestCase
             WHERE (title like '%a%' OR author like '%a%') AND (method like '%Test Driven Development%')
             AND year BETWEEN 2015 and 2020
             ORDER BY title";
-      $this->assertEquals($expectedString, $db->selectData($values->getSearch(), $values->getEndDate(), $values->getStartDate(), $values->getSort(), $values->getMethod(), ""));
+      $this->assertEquals($expectedString, $db->selectData($values->getSearch(), $values->getEndDate(), $values->getStartDate(), $values->getSort(), $values->getMethod(), "", "", ""));
   }
+
+ 
 
 }
 ?>

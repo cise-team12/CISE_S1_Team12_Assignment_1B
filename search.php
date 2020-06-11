@@ -24,9 +24,9 @@ class DatabaseConnection
     $this->link = mysqli_connect($this->host,$this->username,$this->password,$this->database);
     return $this->link;
   }
-  public function selectData($link, $search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting)
+  public function selectData($link, $search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting, $minDate, $maxDate)
   {
-    if($methodSetting == "" && $resultSetting == "")
+    if($methodSetting == "" && $resultSetting == "" && $minDate == "" && $maxDate == "") // none are set
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%')
@@ -34,7 +34,7 @@ class DatabaseConnection
             ORDER BY $sortSetting";
             //echo $this->sqlQuery;
     }
-    else if ($methodSetting != "" && $resultSetting == "")
+    else if ($methodSetting != "" && $resultSetting == "" && $minDate == "" && $maxDate == "") //method is set no custom range
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
@@ -42,13 +42,54 @@ class DatabaseConnection
             ORDER BY $sortSetting";
             //echo $this->sqlQuery;
     }
-    else
+    else if($methodSetting == "" && $resultSetting != "" && $minDate == "" && $maxDate == "")//result is set no custom range
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%')
             AND year BETWEEN $yearResult and $startDate
             ORDER BY $sortSetting";
             //echo $this->sqlQuery;
+    }
+    else if($methodSetting != "" && $resultSetting != "" && $minDate == "" && $maxDate == "")//method, result is set no custom range
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%') AND (method like '%$methodSetting%')
+            AND year BETWEEN $yearResult and $startDate
+            ORDER BY $sortSetting";
+            //echo $this->sqlQuery;
+    }
+
+    else if($methodSetting == "" && $resultSetting == "" && $minDate != "" && $maxDate != "") //no method or result, custom date range
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%')
+            AND year BETWEEN $minDate and $maxDate
+            ORDER BY $sortSetting";
+            //echo $this->sqlQuery;
+    }
+    else if($methodSetting != "" && $resultSetting == "" && $minDate != "" && $maxDate != "")// method set no result but custom date range
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
+            AND year BETWEEN $minDate and $maxDate
+            ORDER BY $sortSetting";
+            //echo $this->sqlQuery;
+    }
+    else if($methodSetting == "" && $resultSetting != "" && $minDate != "" && $maxDate != "") // result set no method but custom date range
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%')
+            AND year BETWEEN $minDate and $maxDate
+            ORDER BY $sortSetting";
+           // echo $this->sqlQuery;
+    }
+    else if($methodSetting != "" && $resultSetting != "" && $minDate != "" && $maxDate != "")
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%') AND (result like '%$resultSetting%')
+            AND year BETWEEN $minDate and $maxDate
+            ORDER BY $sortSetting";
+            // echo $this->sqlQuery;
     }
 
     $this ->dataSet = mysqli_query($link, $this ->sqlQuery);
@@ -94,31 +135,63 @@ class DatabaseConnectionTest
 {
   private $sqlQuery;
 
-  public function selectData($search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting)
+  public function selectData($search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting, $minDate, $maxDate)
   {
-    if($methodSetting == "" && $resultSetting == "")
+    if($methodSetting == "" && $resultSetting == "" && $minDate == "" && $maxDate == "")
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%')
             AND year BETWEEN $yearResult and $startDate
             ORDER BY $sortSetting";
-            //echo $this->sqlQuery;
+            echo $this->sqlQuery;
     }
-    else if ($methodSetting != "" && $resultSetting == "")
+    else if ($methodSetting != "" && $resultSetting == "" && $minDate == "" && $maxDate == "")
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
             AND year BETWEEN $yearResult and $startDate
             ORDER BY $sortSetting";
-            //echo $this->sqlQuery;
+            echo $this->sqlQuery;
     }
-    else
+    else if($methodSetting == "" && $resultSetting != "" && $minDate == "" && $maxDate == "")
     {
       $this ->sqlQuery = "SELECT * FROM `article`
             WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%')
             AND year BETWEEN $yearResult and $startDate
             ORDER BY $sortSetting";
-            //echo $this->sqlQuery;
+            echo $this->sqlQuery;
+    }
+    else if($methodSetting == "" && $resultSetting == "" && $minDate != "" && $maxDate != "") //no method or result, custom date range
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%')
+            AND year BETWEEN $minDate and $maxDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+    else if($methodSetting != "" && $resultSetting == "" && $minDate != "" && $maxDate != "")// method set no result but custom date range
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%')
+            AND year BETWEEN $minDate and $maxDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+    else if($methodSetting == "" && $resultSetting != "" && $minDate != "" && $maxDate != "") // result set no method but custom date range
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (result like '%$resultSetting%')
+            AND year BETWEEN $minDate and $maxDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
+    }
+    else
+    {
+      $this ->sqlQuery = "SELECT * FROM `article`
+            WHERE (title like '%$search%' OR author like '%$search%') AND (method like '%$methodSetting%') AND (result like '%$resultSetting%')
+            AND year BETWEEN $minDate and $maxDate
+            ORDER BY $sortSetting";
+            echo $this->sqlQuery;
     }
     return $this->sqlQuery;
   }
@@ -133,6 +206,8 @@ class InputValues
 	private $sortSetting="";
   private $methodSetting = "";
   private $resultSetting = "";
+  private $minDate = "";
+  private $maxDate = "";
 
   public function setSearch()
   {
@@ -165,7 +240,8 @@ class InputValues
   }
 	public function setEndDate()
   {
-	if(isset($_POST["year"])){
+	if(isset($_POST["year"]))
+  {
 		$this->yearRange = $_POST["year"];
 
 		$this->setStartDate();
@@ -173,12 +249,14 @@ class InputValues
 				$this->yearResult = $this->startDate - 5;
 			}else if ($this->yearRange == "lastTen" ){
 				$this->yearResult =  $this->startDate - 10;
-			}else if ($this->yearRange == "lastFifteen" ){
-				$this->yearResult =  $this->startDate - 15;
-			}else if ($this->yearRange == "lastTwenty" ){
-				$this->yearResult =  $this->startDate - 20;
+			}else if ($this->yearRange == "All" ){
+				$this->yearResult = 2000;
 			}
 		}
+    else
+    {
+      $this->yearResult = 2000;
+    }
   }
   public function setTestEndDate($yearRange)
   {
@@ -188,11 +266,13 @@ class InputValues
 				$this->yearResult = $this->startDate - 5;
 			}else if ($this->yearRange == 10 ){
 				$this->yearResult =  $this->startDate - 10;
-			}else if ($this->yearRange == 15 ){
-				$this->yearResult =  $this->startDate - 15;
-			}else if ($this->yearRange == 20 ){
-				$this->yearResult =  $this->startDate - 20;
+			}else if ($this->yearRange == 20){
+				$this->yearResult = 2000;
 			}
+      else
+      {
+        $this->yearResult = 2000;
+      }
   }
 	public function getEndDate()
   {
@@ -273,6 +353,46 @@ class InputValues
   {
 		return $this->resultSetting;
   }
+  public function setMinDate()
+  {
+		if(isset($_POST["minDate"]))
+		{
+      $this->minDate = $_POST["minDate"];
+
+    }else
+    {
+			$this->minDate = "";
+
+    }
+  }
+  public function setTestMinDate($x)
+  {
+    $this->minDate = $x;
+  }
+	public function getMinDate()
+  {
+		return $this->minDate;
+  }
+  public function setMaxDate()
+  {
+		if(isset($_POST["maxDate"]))
+		{
+      $this->maxDate = $_POST["maxDate"];
+
+    }else
+    {
+			$this->maxDate = "";
+
+    }
+  }
+  public function setTestMaxDate($x)
+  {
+    $this->maxDate = $x;
+  }
+	public function getMaxDate()
+  {
+		return $this->maxDate;
+  }
 }
 
 ?>
@@ -289,6 +409,7 @@ class InputValues
 <body>
 	<h1 class="text-center">Search Result</h1><br>
 	<?php
+
 
 		$db = new DatabaseConnection();
 		$connection= $db->dbConnect();
@@ -313,9 +434,14 @@ class InputValues
         $values ->setMethod();
         $methodSetting = $values -> getMethod();
         $values ->setResult();
-				$resultSetting = $values -> getResult();
+        $resultSetting = $values -> getResult();
+        $values->setMinDate();
+        $minDate = $values->getMinDate();
+        $values->setMaxDate();
+        $maxDate = $values->getMaxDate();
 
-				$sqlResult = $db->selectData($connection, $search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting);
+
+				$sqlResult = $db->selectData($connection, $search,$yearResult,$startDate,$sortSetting, $methodSetting, $resultSetting, $minDate, $maxDate);
         $db->outputData($sqlResult);
 
 				}
