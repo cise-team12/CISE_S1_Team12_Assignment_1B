@@ -1,0 +1,5 @@
+test:
+  adapter: mysql
+  database: seer
+  username: root
+  encoding: utf8
