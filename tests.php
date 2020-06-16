@@ -67,13 +67,13 @@ class tests extends TestCase
       $values->setTestMethod(TRUE, 'method2', TRUE, 'Agile');
       $this->assertEquals('Agile', $values->getMethod());
   }
- 
+
   public function testMethodDevOpsValue()
   {
       $values = new InputValues();
       $values->setTestMethod(TRUE, 'method2', TRUE,'DevOps');
       $this->assertEquals('DevOps', $values->getMethod());
-  } 
+  }
   public function testMethodNoDropDown()
   {
       $values = new InputValues();
@@ -181,7 +181,7 @@ class tests extends TestCase
    // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
   }
 
-  public function testSQLWithTechniqueMethodResultCustomRange()
+  /*public function testSQLWithTechniqueMethodResultCustomRange()
   {
     $db = new DatabaseConnectionTest();
     $expectedString = "SELECT * FROM `article`
@@ -190,7 +190,7 @@ class tests extends TestCase
             ORDER BY title";
     $this->assertEquals($expectedString, $db->selectData("a", "", "", "title", "Agile", "DevOps", "Improve", 2012, 2018));
     // search, yearResult, startDate, sortSetting, methodSetting, technique,resultSetting, minDate, maxDate
-  }
+  }*/
 
   public function testFullFunctionality()
   {
@@ -209,7 +209,7 @@ class tests extends TestCase
       $this->assertEquals($expectedString, $db->selectData($values->getSearch(), $values->getEndDate(), $values->getStartDate(), $values->getSort(), $values->getMethod(), "", "", "", ""));
   }
 
- 
+
 
 }
 ?>
